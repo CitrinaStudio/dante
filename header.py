@@ -1,12 +1,11 @@
-from tinydb import Query, TinyDB
-
 MAPS_PATH = "maps/%s"
 
 LEVELS_PARAMETERS = {
     "chasm": {
         "rooms_multiplier": 1,
         "monsters_multiplier": 1,
-        "monsters": [""]
+        "monsters": [""],
+        "file_interfix": "chasm"
     },
     "2": {
         "rooms_multiplier": 1.50,
@@ -20,12 +19,23 @@ LEVELS_PARAMETERS = {
     }
 }
 
+ACT_CHRONO = ["chasm"]
 
 DEFAULT_COUNT_ROOMS = 10
 
 UNIFICATE_MAP_NOTATION = ['B', 'С', 'E']
+
 """
 B - Barrel
 C - Chest
 E - Enemy
 """
+
+
+WIN_WIDTH = 950
+WIN_HEIGHT = 950
+
+SPRITE_SCALING = 2
+
+RES = "inside/res/%s/%s"
+TEXTURE_FILE_NAME = "%s_%s_%s.png"

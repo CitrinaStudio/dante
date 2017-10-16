@@ -22,8 +22,12 @@ def _reg_door(x, y, room_name, door_position):
 
 def _gen_room(enemy_miltiplier, type="default"):
 
-    room_name = inside.gen.gen_adler32_hash(
-        np.random.uniform(-1000, 1000))
+    if type != "main_room":
+        room_name = inside.gen.gen_adler32_hash(
+            np.random.uniform(-1000, 1000))
+
+    else:
+        room_name = "main"
 
     width = np.random.randint(8, 13)
     height = np.random.randint(6, 10)
@@ -53,13 +57,13 @@ def _gen_room(enemy_miltiplier, type="default"):
 
             map_notation = np.random.choice(h.UNIFICATE_MAP_NOTATION)
 
-            if map_notation == "E" and np.random.random() < (10 * enemy_miltiplier) / (width * height):
+            if type != "main_room" and map_notation == "E" and np.random.random() < (10 * enemy_miltiplier) / (width * height):
                 room += map_notation
                 count_of_enemies += 1
-            elif np.random.random() > (np.random.random() * 10):
+            elif type != "main_room" and np.random.random() > (np.random.random() * 10):
                 room += "B"
 
-            elif 0.8 > np.random.random() > 0.7:
+            elif type != "main_room" and 0.8 > np.random.random() > 0.7:
                 room += "C"
 
             else:
@@ -121,7 +125,7 @@ def _gen_room(enemy_miltiplier, type="default"):
     room_file.write(room)
     room_file.close()
 
-    return {"room": room, "count_of_enemies": count_of_enemies}
+    return {"room_file_name": room_name, "count_of_enemies": count_of_enemies}
 
 
 def gen_adler32_hash(params):
@@ -153,6 +157,7 @@ def construct_map(count_of_rooms, enemy_miltiplier):
     rooms = np.array([], dtype=str)
 
     boss_room = 0
+    main_room = 0
 
     count_of_enemies = 0
 
@@ -160,12 +165,18 @@ def construct_map(count_of_rooms, enemy_miltiplier):
 
         if boss_room == 0:
             room_params = _gen_room(enemy_miltiplier, type="boss_room")
-            rooms = np.append(rooms, room_params["room"])
+            rooms = np.append(rooms, room_params["room_file_name"])
             count_of_enemies += room_params["count_of_enemies"]
             boss_room = 1
+
+        elif main_room == 0:
+            room_params = _gen_room(enemy_miltiplier, type="main_room")
+            rooms = np.append(rooms, room_params["room_file_name"])
+            count_of_enemies += room_params["count_of_enemies"]
+            main_room = 1
         else:
             room_params = _gen_room(enemy_miltiplier)
-            rooms = np.append(rooms, room_params["room"])
+            rooms = np.append(rooms, room_params["room_file_name"])
             count_of_enemies += room_params["count_of_enemies"]
 
     return {"rooms_array": rooms, "count_of_enemies": count_of_enemies}

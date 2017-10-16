@@ -14,4 +14,14 @@ class Map:
 
         self.danger_coeff_rooms = self.count_of_rooms / self.map["count_of_enemies"]
 
-    def get_point_map
+    def get_room_map(self, file_name):
+        if file_name in self.map["rooms_array"]:
+
+            map_room_file = open(h.MAPS_PATH % file_name, "r")
+            room_map = map_room_file.read()
+            map_room_file.close()
+
+            return room_map
+        else:
+            print("MAP NOT FOUND !!!!")
+            exit(1)
